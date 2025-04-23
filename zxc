@@ -1,253 +1,243 @@
-Code:
-Import pandas pd
-Lead the dataset
-df-pd.read_csv("C:\Users\Admin\Dowmloads\archive\student-par.csv")
-efine the number samples and sample size
-num samples-30
-sample Size-int(0.1"len (df))
-#store means of each sample
-sample_means[]
-#Generate multiple sample and calculate mean
-for i in range(num_samples):
-sample-df.sample(n-sample_Size,random_state-i)
-sample_mean-sample.mean(numeric_only-True)
-sample means.append(sample_mean)
-#Convert result to a dataset
-sample_means_df-pd.DataFrame (sample_means)
-Display the means of each sample
-print(sample_means_df)
+1)
+CREATE DATABASE Office;
+USE Office;
+CREATE TABLE EMPLOYEES (
+Employee_Id INT PRIMARY
+KEY, First_Name 
+VARCHAR(50), Last_Name 
+VARCHAR(50),
+Email VARCHAR(100),
+Phone_Number 
+VARCHAR(15), Hire_Date 
+DATE,
+Job_Id VARCHAR(10),
+Salary INT, 
+Commission_Pct INT, 
+Manager_Id INT,
+Department_Id INT
+);
+INSERT INTO
+EMPLOYEES 
+VALUES
+(101, 'John', 'Smith', 'john.smith@example.com', '555-1234', '2020-01-15', 'DEV', 6000, NULL, 100, 60),
+(102, 'Alice', 'Johnson', 'alice.johnson@example.com', '555-5678', '2019-03-10', 'HR', 4500, NULL, 100,
+70),
+(103, 'Robert', 'Austin', 'robert.austin@example.com', '555-9012', '2021-07-22', 'DEV', 4800, NULL, 101,
+60),
+(104, 'Emily', 'Davis', 'emily.davis@example.com', '555-3456', '2018-09-30', 'DEV', 5200, 10, 102, 80),
+(105, 'Michael', 'Brown', 'michael.brown@example.com', '555-7890', '2017-06-15', 'SALES', 3000, 15,
+NULL, 60),
+(106, 'Sarah', 'Austin', 'sarah.austin@example.com', '555-2468', '2022-11-05', 'SALES', 7000, 20, 100,
+70);
+SELECT * FROM EMPLOYEES;
+#Output:-
+( a) Find out the employee id, names, salaries of all the employees.
+SELECT Employee_Id, First_Name, Last_Name, Salary 
+FROM EMPLOYEES;
+(b) List out the employees who work under manager 100
+SELECT Employee_Id, First_Name, Last_Name 
+FROM EMPLOYEES
+WHERE Manager_Id = 100;
+(c) Find the names of the employees who have a salary greater than or equal to 4800
+SELECT First_Name,
+Last_Name FROM 
+EMPLOYEES
+WHERE Salary >= 4800;
+(d) List out the employees whose last name is ‘AUSTIN’
+SELECT Employee_Id, First_Name, Last_Name 
+FROM EMPLOYEES
+WHERE Last_Name = 'AUSTIN';
+(e) Find the names of the employees who work in departments 60, 70, and 80
+SELECT First_Name,
+Last_Name FROM 
+EMPLOYEES
+WHERE Department_Id IN (60, 70, 80);
+(f) Display the unique Manager_Id
+SELECT DISTINCT Manager_Id 
+FROM EMPLOYEES;
 
 
-Problem Statement: Data is often incomplete and contains missing values. The 
-challenge is to clean, process, and analyze data efficiently using Pandas 
-functionalities to extract insights. 
-''' 
-Program: 
-import numpy as np 
-import pandas as pd 
-# Sample dataset 
-raw_data = { 
-'Name': ['Alice', 'Bob', 'Charlie', 'David', 'Eve', np.nan], 
-'Age': [25, 30, 35, np.nan, 28, 40], 
-'Salary': [50000, 60000, np.nan, 70000, 55000, 65000], 
-'Department': ['HR', 'IT', 'IT', 'Finance', 'HR', np.nan] 
-} 
-df = pd.DataFrame(raw_data) 
-# Display original dataset print("Original Data:") 
-print(df) 
-# Data Cleaning 
-# 1. Remove rows where 'Name' is missing 
-df.dropna(subset=['Name'], inplace=True) 
-# 2. Fill missing values in 'Age' with the column mean 
-df['Age'].fillna(df['Age'].mean(), inplace=True) 
-# 3. Fill missing values in 'Salary' with the column median 
-df['Salary'].fillna(df['Salary'].median(), inplace=True) 
-# 4. Fill missing values in 'Department' with 'Unknown' 
-df['Department'].fillna('Unknown', inplace=True) 
-# Display cleaned dataset 
-print("\nCleaned Data:") print(df) 
-# Data Analysis 
-# 1. Summary Statistics 
-print("\nSummary Statistics:") print(df.describe()) 
-# 2. Average Salary per Department 
-print("\nAverage Salary per Department:") print(df.groupby('Department')['Salary'].mean()) 
-# 3. Count of Employees per Department 
-print("\nEmployee Count per Department:") print(df['Department'].value_counts()) 
-# 4. Maximum and Minimum Salary print("\nMaximum Salary:", df['Salary'].max()) 
-print("Minimum Salary:", df['Salary'].min())
+2)
+CREATE DATABASE Client;
+USE Client;
+CREATE TABLE Client_master (
+ClientNO VARCHAR(10) PRIMARY
+KEY, Name VARCHAR(50),
+Address VARCHAR(100), 
+City VARCHAR(50),
+State VARCHAR(50),
+bal_due INT
+);
+( a ) Insert five records
+INSERT INTO Client_master (ClientNO, Name, Address, City, State, bal_due) 
+VALUES
+('C101', 'Alice Johnson', '12 Baker Street', 'San Francisco', 'CA', 7500), 
+('C102', 'Bob Miller', '34 Maple Drive', 'Austin', 'TX', 4500),
+('C103', 'Charlie Adams', '56 Pine Blvd', 'Denver', 'CO', 5200),
+('C104', 'Diana Evans', '78 Oak Lane', 'Seattle', 'WA', 2800),
+('C105', 'Ethan Carter', '90 Cedar Road', 'Boston', 'MA', 6100); 
+SELECT * FROM Client_master;
+(b) Find the Names of Clients Whose bal_due > 5000
+SELECT Name
+FROM Client_master 
+WHERE bal_due > 5000;
+(c) Change the bal_due of ClientNO “C101” to Rs. 5100
+UPDATE Client_master 
+SET bal_due = 5100 
+WHERE ClientNO =
+'C101';
+SELECT * FROM Client_master;
+(d) Change the Name of Client_master Table to Client12
+ALTER TABLE
+Client_master RENAME TO 
+Client12; SELECT * FROM 
+Client12;
+(e) Display the bal_due with the Heading “BALANCE”
+SELECT bal_due AS BALANCE 
+FROM Client12;
+
+
+3)
+CREATE DATABASE CollegeDB;
+USE CollegeDB;
+CREATE TABLE
+Teacher ( Name 
+VARCHAR(50),
+DeptNo INT,
+Date_of_Joining DATE NOT NULL, -- (f) Applying NOT NULL constraint 
+DeptName VARCHAR(50),
+Location VARCHAR(50), 
+Salary DECIMAL(10,2)
+( a ) Insert Ten records
+INSERT INTO Teacher (Name, DeptNo, Date_of_Joining, DeptName, Location, Salary) VALUES 
+('Alice', 101, '2015-06-15', 'Mathematics', 'New York', 50000),
+('Bob', 102, '2017-08-22', 'Commerce', 'Los Angeles', 45000),
+('Charlie', 103, '2016-03-10', 'Science', 'Chicago', 52000),
+('David', 104, '2018-09-14', 'Mathematics', 'San Francisco', 48000),
+('Eve', 105, '2019-11-30', 'Commerce', 'Boston', 47000),
+('Frank', 106, '2020-01-25', 'English', 'Seattle', 43000),
+('Grace', 107, '2014-05-18', 'History', 'Houston', 49000),
+('Hannah', 108, '2016-07-09', 'Mathematics', 'Dallas', 51000),
+('Ian', 109, '2018-12-01', 'Commerce', 'San Diego', 46000),
+('Jack', 110, '2021-03-21', 'Science', 'Denver', 53000);
+SELECT * FROM Teacher;
+( b ) Give Increment of 25% salary for Mathematics Department .
+UPDATE Teacher
+SET Salary = Salary * 1.25
+WHERE DeptName = 'Mathematics';
+( c ) Perform Rollback command
+ROLLBACK;
+( d ) Give Increment of 15% salary for Commerce Department
+UPDATE Teacher
+SET Salary = Salary * 1.15
+WHERE DeptName = 'Commerce';
+( e ) Perform commit command 
+COMMIT;
+(f) Add the constraint not null on the Date of Joining
+Add NOT NULL Constraint on Date_of_Joining (Already done in Step 2)
+(g) Change the datatype of JOB_ID from char to varchar2
+ALTER TABLE Teacher
+ADD JOB_ID VARCHAR(10);
+(h)Add a new column; HIREDATE to the existing relation and add the constraint not null on it
+ALTER TABLE Teacher
+ADD HIREDATE DATE DEFAULT '2000-01-01' NOT NULL;
+(i) delete the record of the commerce department
+DELETE FROM Teacher
+WHERE DeptName = 'Commerce';
+
+
+4)
+CREATE DATABASE SalesDB;
+USE SalesDB;
+CREATE TABLE
+Sales (
+SalesNo INT PRIMARY KEY,
+SalesName
+VARCHAR(50), Branch 
+VARCHAR(50),
+SalesAmount
+INT, DOB 
+DATE
+);
+(a ) Insert five records
+INSERT INTO Sales (SalesNo, SalesName, Branch, SalesAmount, DOB)
+VALUES (1, 'Alice', 'New York', 5000, '1990-12-15'),
+(2, 'Bob', 'Los Angeles', 7000, '1988-05-22'),
+(3, 'Charlie', 'Chicago', 6500, '1992-12-25'),
+(4, 'David', 'New York', 8000, '1995-07-10'),
+(5, 'Eve', 'Los Angeles', 7200, '1991-03-08');
+(b ) Calculate total sales amount in each branch 
+SELECT Branch, SUM(SalesAmount) AS
+Total_Sales FROM Sales
+GROUP BY Branch;
+(c ) Calculate average sales amount in each
+branch . SELECT Branch, AVG(SalesAmount) AS
+Average_Sales FROM Sales
+GROUP BY Branch;
+(d ) Display all the salesmen, DOB who are born in the month of December as
+day in character format i.e. 21-Dec-09
+SELECT SalesName, DATE_FORMAT(DOB, '%d-%b-%y') AS 
+Formatted_DOB FROM Sales
+WHERE MONTH(DOB) = 12;
+(e ) Display the name and DOB of salesman in alphabetical order of the month
+SELECT SalesName, DOB 
+FROM Sales
+ORDER BY MONTH(DOB);
+(f)Display the list of the Salesman in Upper Case.
+SELECT UPPER(SalesName) AS Salesman_Name 
+FROM Sales;
+
+5)
+CREATE TABLE students ( roll_no int,
+attendance int, status varchar(20)
+);
+insert into students (roll_no, attendance, status) values (101, 80); insert into students (roll_no, attendance, status) values (102, 65); 
+insert into students (roll_no, attendance, status) values (103, 92); insert into students (roll_no, attendance, status) values (104, 55); 
+insert into students (roll_no, attendance, status) values (105, 98);
+set serveroutput on;
+SQL> declare
+roll students.roll_no%TYPE;
+att students.attendance%TYPE; begin
+roll:= &roll_no;
+select attendance into att from students where roll_no = roll; if att<75 then
+dbms_output.put_line(roll || 'term not granted'); update students set status='D' where roll_no=roll; else
+dbms_output.put_line(roll || 'term granted');
+update students set status='ND' where roll_no=roll; end if;
+commit; exception
+when no_data_found then dbms_output.put_line(roll || 'student not found'); when others then dbms_output.put_line('unexpected error');
+end;
+/
+
+
+6)
+CREATE TABLE EMPLOYEES ( FIRST_NAME VARCHAR(20), LAST_NAME VARCHAR(20), DEPARTMENT_ID INT, SALARY INT
+);
+INSERT INTO EMPLOYEES(fIRST_NAME, LAST_NAME, DEPARTMENT_ID, SALARY
+)VALUES(‘Ram’, ‘Sharma’, 101, 5000);
+INSERT INTO EMPLOYEES(fIRST_NAME, LAST_NAME, DEPARTMENT_ID, SALARY
+)VALUES(Paxton, Evans, 102, 5622);
+INSERT INTO EMPLOYEES(fIRST_NAME, LAST_NAME, DEPARTMENT_ID, SALARY
+)VALUES(Violet, Abrams, 103, 4500);
+
+
+set serveroutput on; declare
+v_emp_name employees.first_name%type; v_emp_l_name employees.last_name%type; v_emp_id employees.department_id%type;
+v_salary employees.salary%type;
+cursor highest_paid is select first_name, last_name ,department_id, salary from employees where salary=(select max(salary) from employees);
+begin
+open highest_paid;
+fetch highest_paid into v_emp_name, v_emp_l_name, v_emp_id, v_salary; if highest_paid%found then
+dbms_output.put_line('first name:' || v_emp_name); dbms_output.put_line('last name:' || v_emp_l_name); dbms_output.put_line('department id:' || v_emp_id); dbms_output.put_line('salary:' || v_salary);
+else
+dbms_output.put_line('no record found'); end if;
+close highest_paid; end;
+/
 
 
 7)
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-%matplotlib inline
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import r2_score
-from sklearn.model_selection import train_test_split
-filepath = r'C:\Users\Varun\Desktop\endsem sem 3\score.csv'
-df=pd.read_csv(filepath)
-df.head()
-x=df.Hours
-y=df.Scores
-x_label='Hours'
-y_label='Scores'
-plt.xlabel(x_label)
-plt.ylabel(y_label)
-plt.scatter(x,y)
-x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2,random_state=0)
-r2=r2_score(y_test,y_pred)
-r2
-model = LinearRegression()
-model.fit(x_train, y_train)
-y_pred = model.predict(x_test)
-plt.title(f'Hours vs Scores (r2={r2:.2f})')
-plt.scatter(x_test, y_test,label='Scatter')
-plt.plot(x_test, y_pred, color='yellow',label='LinearRegression')
-plt.xlabel('Scores')
-plt.ylabel('Hours')
-plt.legend()
-
-
-8.Problem statement : Design a python program for clustering analysis. Allow users to input a 
-dataset and choose a clustering algorithm. Implement the selected algorithm, visualize the 
-clusters and provide output into grouping pattern using data.
-import numpy as np 
-import pandas as pd
-import matplotlib.pyplot as plt 
-import seaborn as sns
-from sklearn.cluster import KMeans
-from sklearn.preprocessing import StandardScaler 
-from sklearn.decomposition import PCA
-def load_dataset(file_path): 
-"""Load dataset from CSV file.""" 
-try:
-df = pd.read_csv(file_path) 
-print("\nDataset loaded successfully!")
-print(f"Available columns: {list(df.columns)}\n") 
-return df
-except Exception as e:
-print(f"Error loading CSV file: {e}") 
-return None
-def perform_kmeans_clustering(data, num_clusters): 
-"""Performs K-Means clustering."""
-scaler = StandardScaler()
-scaled_data = scaler.fit_transform(data)
-kmeans = KMeans(n_clusters=num_clusters, random_state=42) 
-clusters = kmeans.fit_predict(scaled_data)
-data['Cluster'] = clusters 
-return data, kmeans
-def visualize_clusters(data, num_clusters):
-"""Visualize clusters using PCA (for dimensionality reduction).""" 
-pca = PCA(n_components=2)
-reduced_data = pca.fit_transform(data.drop(columns=['Cluster'])) 
-data['PCA1'], data['PCA2'] = reduced_data[:, 0], reduced_data[:, 1]
-plt.figure(figsize=(8, 6))
-sns.scatterplot(x='PCA1', y='PCA2', hue='Cluster', data=data, palette='viridis', s=100, 
-alpha=0.8)
-plt.title(f'K-Means Clustering with {num_clusters} Clusters') 
-plt.xlabel('PCA Component 1')
-plt.ylabel('PCA Component 2') 
-plt.legend(title='Cluster') 
-plt.show()
-def main():
-file_path = 'C:\\Users\\ADMIN\\OneDrive\\Desktop\\SEM4\\DAP_LAB\\sample_data.csv' 
-df = load_dataset(file_path)
-if df is None: 
-return
-print("\nChoose the features for clustering (comma-separated):") 
-selected_features = input().split(',')
-selected_features = [f.strip() for f in selected_features]
-if not all(feature in df.columns for feature in selected_features): 
-print("Invalid feature selection!")
-return
-num_clusters = int(input("\nEnter the number of clusters (K): ").strip())
-clustered_data, kmeans = perform_kmeans_clustering(df[selected_features], num_clusters) 
-print("\nCluster Centers:")
-print(pd.DataFrame(kmeans.cluster_centers_, columns=selected_features))
-print("\nClustered Data:")
-print(clustered_data[['Cluster'] + selected_features].head()) 
-visualize_clusters(clustered_data, num_clusters)
-main()
-
-
-
-9.Problem Statement: Develop a python program for hypotheses testing, focusing on comparing 
-means of two samples. Implement a statistical test such as t test or z test to analyse whether 
-there is significant diff between the means
-import numpy as np 
-import scipy.stats as stats
-def z_test(sample1, sample2, sigma1, sigma2, alpha=0.05): 
-mean1 = np.mean(sample1)
-mean2 = np.mean(sample2) 
-n1 = len(sample1)
-n2 = len(sample2)
-se = np.sqrt((sigma1**2 / n1) + (sigma2**2 / n2)) 
-z_statistic = (mean1 - mean2) / se
-z_critical = stats.norm.ppf(1 - alpha / 2) 
-print(f"Z-statistic: {z_statistic}")
-print(f"Z-critical (two-tailed): {z_critical}") 
-if abs(z_statistic) > z_critical:
-print("We reject the null hypothesis: The means are significantly different.") 
-else:
-print("We fail to reject the null hypothesis: No significant difference between the means.")
-sample1 = [80, 85, 90, 92, 88, 76, 95, 91, 85, 87]
-sample2 = [78, 82, 79, 81, 85, 77, 80, 82, 86, 83]
-sigma1 = 5
-sigma2 = 5
-z_test(sample1, sample2, sigma1, sigma2)
-
-
-
-10.Problem Statement: Develop a Python program for hypothesis testing, focusing on 
-comparing means of two samples and multiple groups using ANOVA. Implement statistical tests 
-such as t-test and ANOVA to analyze whether there is a significant difference between the 
-means. The program should handle different scenarios where a t-test is required for two 
-samples, and ANOVA is needed for more than two groups.
-import numpy as np 
-import pandas as pd
-import matplotlib.pyplot as plt 
-import seaborn as sns
-from scipy.stats import ttest_ind, f_oneway
-def load_dataset(file_path): 
-"""Load dataset from CSV file.""" 
-try:
-df = pd.read_csv(file_path) 
-print("\nDataset loaded successfully!")
-print(f"Available columns: {list(df.columns)}\n") 
-return df
-except Exception as e:
-print(f"Error loading CSV file: {e}") 
-return None
-def perform_t_test(group1, group2):
-"""Performs an independent t-test for two samples.""" 
-stat, p_value = ttest_ind(group1, group2)
-print("\nT-Test Results:")
-print(f"T-statistic: {stat:.4f}, P-value: {p_value:.4f}")
-if p_value < 0.05:
-print("Conclusion: There is a significant difference between the two groups.") 
-else:
-print("Conclusion: No significant difference found between the two groups.")
-def perform_anova(groups):
-"""Performs ANOVA for multiple groups.""" 
-stat, p_value = f_oneway(*groups) 
-print("\nANOVA Results:")
-print(f"F-statistic: {stat:.4f}, P-value: {p_value:.4f}")
-if p_value < 0.05:
-print("Conclusion: There is a significant difference between at least two groups.") 
-else:
-print("Conclusion: No significant difference found between the groups.")
-def visualize_groups(data, group_column, value_column): 
-"""Visualize the data using a box plot.""" 
-plt.figure(figsize=(8, 6))
-sns.boxplot(x=group_column, y=value_column, data=data) 
-plt.title("Group Comparison")
-plt.xlabel(group_column) 
-plt.ylabel(value_column) 
-plt.show()
-def main():
-file_path = 'C:\\Users\\ADMIN\\OneDrive\\Desktop\\SEM4\\DAP_LAB\\annova.csv' 
-df = load_dataset(file_path)
-if df is None: 
-return
-# User selects categorical column (grouping variable) and numerical column (value) 
-print("\nChoose the categorical column (grouping variable):")
-group_column = input().strip()
-print("\nChoose the numerical column for comparison:") 
-value_column = input().strip()
-if group_column not in df.columns or value_column not in df.columns: 
-print("Invalid column selection!")
-return
-# Extract groups
-grouped_data = df.groupby(group_column)[value_column].apply(list)
-if len(grouped_data) == 2:
-# Perform T-test if there are exactly two groups 
-perform_t_test(*grouped_data)
-elif len(grouped_data) > 2:
-# Perform ANOVA if more than two groups exist 
-perform_anova(grouped_data)
-else:
-print("Not enough groups for comparison!") 
-# Visualize the data
-visualize_groups(df, group_column, value_column) 
-main()
+Triggers CREATE TABLE employee(
+EMP_ID INT,
+SALARY INT
+);
+INSERT INTO employee (EMP_ID, SALARY) VALUES(101, 5000); INSERT INTO employee (EMP_ID, SALARY) VALUES(102, 999);
+INSERT INTO employee (EMP_ID, SALARY) VALUES(103,2000);
