@@ -1,243 +1,523 @@
-1)
-CREATE DATABASE Office;
-USE Office;
-CREATE TABLE EMPLOYEES (
-Employee_Id INT PRIMARY
-KEY, First_Name 
-VARCHAR(50), Last_Name 
-VARCHAR(50),
-Email VARCHAR(100),
-Phone_Number 
-VARCHAR(15), Hire_Date 
-DATE,
-Job_Id VARCHAR(10),
-Salary INT, 
-Commission_Pct INT, 
-Manager_Id INT,
-Department_Id INT
-);
-INSERT INTO
-EMPLOYEES 
-VALUES
-(101, 'John', 'Smith', 'john.smith@example.com', '555-1234', '2020-01-15', 'DEV', 6000, NULL, 100, 60),
-(102, 'Alice', 'Johnson', 'alice.johnson@example.com', '555-5678', '2019-03-10', 'HR', 4500, NULL, 100,
-70),
-(103, 'Robert', 'Austin', 'robert.austin@example.com', '555-9012', '2021-07-22', 'DEV', 4800, NULL, 101,
-60),
-(104, 'Emily', 'Davis', 'emily.davis@example.com', '555-3456', '2018-09-30', 'DEV', 5200, 10, 102, 80),
-(105, 'Michael', 'Brown', 'michael.brown@example.com', '555-7890', '2017-06-15', 'SALES', 3000, 15,
-NULL, 60),
-(106, 'Sarah', 'Austin', 'sarah.austin@example.com', '555-2468', '2022-11-05', 'SALES', 7000, 20, 100,
-70);
-SELECT * FROM EMPLOYEES;
-#Output:-
-( a) Find out the employee id, names, salaries of all the employees.
-SELECT Employee_Id, First_Name, Last_Name, Salary 
-FROM EMPLOYEES;
-(b) List out the employees who work under manager 100
-SELECT Employee_Id, First_Name, Last_Name 
-FROM EMPLOYEES
-WHERE Manager_Id = 100;
-(c) Find the names of the employees who have a salary greater than or equal to 4800
-SELECT First_Name,
-Last_Name FROM 
-EMPLOYEES
-WHERE Salary >= 4800;
-(d) List out the employees whose last name is ‘AUSTIN’
-SELECT Employee_Id, First_Name, Last_Name 
-FROM EMPLOYEES
-WHERE Last_Name = 'AUSTIN';
-(e) Find the names of the employees who work in departments 60, 70, and 80
-SELECT First_Name,
-Last_Name FROM 
-EMPLOYEES
-WHERE Department_Id IN (60, 70, 80);
-(f) Display the unique Manager_Id
-SELECT DISTINCT Manager_Id 
-FROM EMPLOYEES;
+AI
+1) water jug
+def dfs(current_state, target, X, Y, visited, path): 
+ if current_state == target: 
+ path.append(current_state) 
+ return True 
+ if current_state in visited: 
+ return False 
+ visited.add(current_state) 
+ path.append(current_state) 
+ possible_states = generate_next_states(current_state, X, Y) 
+ for state in possible_states: 
+ if dfs(state, target, X, Y, visited, path): 
+ return True 
+ path.pop() 
+ return False 
+def generate_next_states(state, X, Y): 
+ possible_states = [] 
+ possible_states.append((X, state[1])) 
+ possible_states.append((state[0], Y)) 
+ possible_states.append((0, state[1])) 
+ possible_states.append((state[0], 0)) 
+ pour_X_to_Y = min(state[0], Y - state[1]) 
+ possible_states.append((state[0] - pour_X_to_Y, state[1] + pour_X_to_Y)) 
+ pour_Y_to_X = min(state[1], X - state[0]) 
+ possible_states.append((state[0] + pour_Y_to_X, state[1] - pour_Y_to_X)) 
+ return possible_states 
+def water_jug_problem(X, Y, Z): 
+ start_state = (0, 0) 
+ visited = set() 
+ path = [] 
+ if dfs(start_state, (Z, 0), X, Y, visited, path) or dfs(start_state, (0, Z), X, Y, 
+visited, path): 
+ print("Solution found! The steps are:") 
+ for step in path: 
+ print(f"{step[0]}, {step[1]}") 
+ return True 
+ else: 
+ return False 
+X = int(input("Enter the capacity of the 1st jug: ")) 
+Y = int(input("Enter the capacity of the 2nd jug: ")) 
+Z = int(input("Enter the desired capacity for the 1st jug: ")) 
+if water_jug_problem(X, Y, Z): 
+print("Solution Found") 
+else: 
+print("Solution not Found")
 
 
+
+
+2)8 number tiles
+import heapq
+def heuristic(state, goal_state):
+ return sum(1 for i in range(9) if state[i] != goal_state[i] and state[i] != 0)
+def find_blank_tile(state):
+ return state.index(0)
+def generate_possible_moves(state):
+ moves = [] 
+ directions = [-1, 1, -3, 3]
+ blank_index = find_blank_tile(state)
+ for direction in directions:
+ new_index = direction + blank_index
+ 
+ if direction == -1 and blank_index % 3 == 0:
+ continue
+ if direction == 1 and (blank_index + 1) % 3 == 0:
+ continue
+ if 0 <= new_index < 9:
+ new_state = state[:]
+ new_state[blank_index], new_state[new_index] = new_state[new_index], 
+new_state[blank_index]
+ moves.append(new_state)
+ return moves
+def is_solution(state, goal_state):
+ return state == goal_state
+def a_star_search(start, goal):
+ open_list = []
+ initial_heuristic = heuristic(start, goal)
+ heapq.heappush(open_list, (initial_heuristic, start, 0, []))
+ visited = set()
+ while open_list:
+ f, current, g, path = heapq.heappop(open_list)
+ 
+ if is_solution(current, goal):
+ return path + [current]
+ visited.add(tuple(current))
+ for child in generate_possible_moves(current):
+ if tuple(child) not in visited:
+ child_heuristic = heuristic(child, goal)
+ new_g = g + 1
+ heapq.heappush(open_list, (new_g + child_heuristic, child, new_g, path + [current]))
+ return None
+start_state = [1, 2, 3, 5, 0, 6, 4, 7, 8]
+goal_state = [1, 2, 3, 4, 5, 6, 7, 8, 0]
+print("Initial State:")
+for i in range(0, 9, 3):
+ print(start_state[i:i+3])
+solution = a_star_search(start_state, goal_state)
+if solution:
+ print("\nFinal State (Goal):")
+ for i in range(0, 9, 3):
+ print(solution[-1][i:i+3])
+ 
+ print(f"\nSolution found in {len(solution) - 1} moves!")
+ print("\nMoves:")
+ for step in solution:
+ for i in range(0, 9, 3):
+ print(step[i:i+3])
+ print()
+else:
+ print("\nNo solution!")
+
+
+
+
+3)Tic Tac Toe
+import random
+PLAYER_X = 'X'
+PLAYER_O = 'O'
+EMPTY = ' '
+def display_board(board):
+ for i in range(3):
+ print(" | ".join(board[i]))
+ if i < 2:
+ print("---------")
+ print()
+def has_winner(board, player):
+ for i in range(3):
+ if all([board[i][j] == player for j in range(3)]) or all([board[j][i] == player for j in range(3)]):
+ return True
+ if board[0][0] == player and board[1][1] == player and board[2][2] == player:
+ return True
+ if board[0][2] == player and board[1][1] == player and board[2][0] == player:
+ return True
+ return False
+def is_draw(board):
+ for row in board:
+ if EMPTY in row:
+ return False
+ return True
+def minimax(board, depth, is_maximizing, alpha, beta):
+ if has_winner(board, PLAYER_X):
+ return -1
+ if has_winner(board, PLAYER_O):
+ return 1
+ if is_draw(board):
+ return 0
+ 
+ if is_maximizing:
+ best_value = float('-inf')
+ for i in range(3):
+ for j in range(3):
+ if board[i][j] == EMPTY:
+ board[i][j] = PLAYER_O
+ best_value = max(best_value, minimax(board, depth + 1, False, alpha, beta))
+ board[i][j] = EMPTY
+ alpha = max(alpha, best_value)
+ if beta <= alpha:
+ break
+ return best_value
+ else:
+ best_value = float('inf')
+ for i in range(3):
+ for j in range(3):
+ if board[i][j] == EMPTY:
+ board[i][j] = PLAYER_X
+ best_value = min(best_value, minimax(board, depth + 1, True, alpha, beta))
+ board[i][j] = EMPTY
+ beta = min(beta, best_value)
+ if beta <= alpha:
+ break
+ return best_value
+def get_best_move(board):
+ best_move = None
+ best_value = float('-inf')
+ 
+ for i in range(3):
+ for j in range(3):
+ if board[i][j] == EMPTY:
+ board[i][j] = PLAYER_O
+ move_value = minimax(board, 0, False, float('-inf'), float('inf'))
+ board[i][j] = EMPTY
+ if move_value > best_value:
+ best_value = move_value
+ best_move = (i, j)
+ 
+ return best_move
+def start_game():
+ board = [[EMPTY] * 3 for _ in range(3)]
+ current_turn = PLAYER_X
+ 
+ while True:
+ display_board(board)
+ 
+ if current_turn == PLAYER_X:
+ row, col = map(int, input("Enter your move (row col): ").split())
+ if board[row][col] == EMPTY:
+ board[row][col] = PLAYER_X
+ print(f"You chose this move: ({row}, {col})")
+ if has_winner(board, PLAYER_X):
+ display_board(board)
+ print("Player X wins!")
+ break
+ current_turn = PLAYER_O
+ else:
+ print("Invalid move, try again.")
+ else:
+ print("Computer is making a move...")
+ row, col = get_best_move(board)
+ board[row][col] = PLAYER_O
+ print(f"Computer chose this move: ({row}, {col})")
+ if has_winner(board, PLAYER_O):
+ display_board(board)
+ print("Player O (Computer) wins!")
+ break
+ current_turn = PLAYER_X
+ if is_draw(board):
+ display_board(board)
+ print("It's a draw!")
+ break
+start_game()
+
+
+
+
+4)Shortes path
+import heapq 
+def dijkstras(graph, start): 
+ distances = {node: float('inf') for node in graph} 
+ distances[start] = 0 
+ priority_queue = [(0, start)] 
+ while priority_queue: 
+ current_distance, current_node = heapq.heappop(priority_queue) 
+ if current_distance > distances[current_node]: 
+ continue 
+ for neighbor, weight in graph[current_node].items(): 
+ new_distance = current_distance + weight 
+ 
+ if new_distance < distances[neighbor]: 
+ distances[neighbor] = new_distance 
+ heapq.heappush(priority_queue, (new_distance, neighbor)) 
+ return distances 
+graph = { 
+ 'A': {'B': 1, 'C': 4}, 
+ 'B': {'A': 1, 'C': 4, 'D': 5}, 
+ 'C': {'A': 4, 'B': 2, 'D': 1}, 
+ 'D': {'B': 5, 'C': 1} 
+} 
+start_node = 'A' 
+shortest_paths = dijkstras(graph, start_node) 
+print("Shortest distances from node", start_node) 
+for node, dist in shortest_paths.items(): 
+ print(f"Distance to {node}: {dist}"
+
+
+
+5) Alpha Beta game search
+class TreeNode:
+def init (self,value=None,children=None):
+self.value=value
+self.children=children
+def alpha_beta_purning(node,depth,alpha,beta,maximizingPlayer):
+if depth==0 or not node.children:
+return node.value
+if maximizingPlayer:
+maxeval=-float('inf')
+for child in node.children:
+eval=alpha_beta_purning(child,depth-1,alpha,beta,False)
+maxeval=max(maxeval,eval)
+alpha=max(alpha,eval)
+if beta<=alpha:
+break
+return maxeval
+else:
+mineval=float('inf')
+for child in node.children:
+eval=alpha_beta_purning(child,depth-1,alpha,beta,True)
+mineval=min(mineval,eval)
+beta=min(beta,eval)
+if beta<=alpha:
+break
+return mineval
+leaf1=TreeNode(2)
+leaf2=TreeNode(3)
+leaf3=TreeNode(5)
+leaf4=TreeNode(9)
+leaf5=TreeNode(0)
+leaf6=TreeNode(1)
+leaf7=TreeNode(7)
+leaf8=TreeNode(5)
+nodeD=TreeNode(None,[leaf1,leaf2])
+nodeE=TreeNode(None,[leaf3,leaf4])
+nodeF=TreeNode(None,[leaf5,leaf6])
+nodeG=TreeNode(None,[leaf7,leaf8])
+nodeB=TreeNode(None,[nodeD,nodeE])
+nodeC=TreeNode(None,[nodeF,nodeG])
+root=TreeNode(None,[nodeB,nodeC])
+result=alpha_beta_purning(root,3,float('inf'),float('inf'),True)
+print(f"optimal value :{result}")
+
+
+
+6)Color Mapping
+import matplotlib.pyplot as plt
+import networkx as nx
+# Example graph with cities as nodes
+cities = ["City A", "City B", "City C", "City D"]
+edges = [("City A", "City B"), ("City A", "City C"), ("City B", "City C"), ("City B", "City D"), ("City C", "City D")]
+# Create the graph
+G = nx.Graph()
+G.add_edges_from(edges)
+# Simple greedy graph coloring
+colors = nx.coloring.greedy_color(G, strategy="largest_first")
+color_map = [colors[city] for city in G.nodes()]
+# Plot the graph
+plt.figure(figsize=(6, 6))
+nx.draw(G, with_labels=True, node_color=color_map, node_size=800, cmap=plt.cm.rainbow)
+plt.title("City Graph Coloring")
+plt.show()
+
+
+
+
+7) N-Queen
+global N
+N = int(input("Enter the number of queen on chessboard:"))
+global L
+L = [-1 for x in range(N)] # Initialize all positions as -1 (empty)
+def is_safe(row, col):
+for x in range(row):
+c2 = L[x]
+if c2 == col or abs(col - c2) == abs(x - row):
+return False
+return True
+def it(row):
+if row >= N:
+return True
+for i in range(N):
+if is_safe(row, i): # Check if placing queen at (row, i) is safe
+L[row] = i # Place the queen in column i at row `row`
+if it(row + 1): # Recursively place queens in the next row
+return True
+L[row] = -1 # Backtrack if placing the queen does not lead to a solution
+return False
+position_queen = []
+if it(0): # Start from row 0
+for i in range(N):
+position_queen.append((i, L[i])) # Add the (row, column) position to the list
+print(f"Positions of queens: {position_queen}")
+# Print the board with queens placed at the valid positions
+for i in range(N):
+for j in range(N):
+if L[i] == j:
+print("Q", end="\t")
+else:
+print(".", end="\t")
+print()
+else:
+print("No solution found.")
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+EDA
 2)
-CREATE DATABASE Client;
-USE Client;
-CREATE TABLE Client_master (
-ClientNO VARCHAR(10) PRIMARY
-KEY, Name VARCHAR(50),
-Address VARCHAR(100), 
-City VARCHAR(50),
-State VARCHAR(50),
-bal_due INT
-);
-( a ) Insert five records
-INSERT INTO Client_master (ClientNO, Name, Address, City, State, bal_due) 
-VALUES
-('C101', 'Alice Johnson', '12 Baker Street', 'San Francisco', 'CA', 7500), 
-('C102', 'Bob Miller', '34 Maple Drive', 'Austin', 'TX', 4500),
-('C103', 'Charlie Adams', '56 Pine Blvd', 'Denver', 'CO', 5200),
-('C104', 'Diana Evans', '78 Oak Lane', 'Seattle', 'WA', 2800),
-('C105', 'Ethan Carter', '90 Cedar Road', 'Boston', 'MA', 6100); 
-SELECT * FROM Client_master;
-(b) Find the Names of Clients Whose bal_due > 5000
-SELECT Name
-FROM Client_master 
-WHERE bal_due > 5000;
-(c) Change the bal_due of ClientNO “C101” to Rs. 5100
-UPDATE Client_master 
-SET bal_due = 5100 
-WHERE ClientNO =
-'C101';
-SELECT * FROM Client_master;
-(d) Change the Name of Client_master Table to Client12
-ALTER TABLE
-Client_master RENAME TO 
-Client12; SELECT * FROM 
-Client12;
-(e) Display the bal_due with the Heading “BALANCE”
-SELECT bal_due AS BALANCE 
-FROM Client12;
+import pandas as pd 
+import numpy as np
+import matplotlib.pyplot as plt 
+import seaborn as sns
+# Load Titanic dataset (replace with your file path)
+df = pd.read_csv(r'C:\Users\pjbot\OneDrive\Documents\Desktop\Student.csv')
+# Display the first few rows of the dataset 
+print("First few rows of the dataset:") 
+print(df.head())
+# Display general information about the dataset 
+print("\nDataset Information:")
+print(df.info())
+# Display basic statistical summary 
+print("\nStatistical Summary:") 
+print(df.describe())
+missing_values = df.isnull().sum() 
+print("Missing Values in Each Column:") 
+print(missing_values)
 
 
-3)
-CREATE DATABASE CollegeDB;
-USE CollegeDB;
-CREATE TABLE
-Teacher ( Name 
-VARCHAR(50),
-DeptNo INT,
-Date_of_Joining DATE NOT NULL, -- (f) Applying NOT NULL constraint 
-DeptName VARCHAR(50),
-Location VARCHAR(50), 
-Salary DECIMAL(10,2)
-( a ) Insert Ten records
-INSERT INTO Teacher (Name, DeptNo, Date_of_Joining, DeptName, Location, Salary) VALUES 
-('Alice', 101, '2015-06-15', 'Mathematics', 'New York', 50000),
-('Bob', 102, '2017-08-22', 'Commerce', 'Los Angeles', 45000),
-('Charlie', 103, '2016-03-10', 'Science', 'Chicago', 52000),
-('David', 104, '2018-09-14', 'Mathematics', 'San Francisco', 48000),
-('Eve', 105, '2019-11-30', 'Commerce', 'Boston', 47000),
-('Frank', 106, '2020-01-25', 'English', 'Seattle', 43000),
-('Grace', 107, '2014-05-18', 'History', 'Houston', 49000),
-('Hannah', 108, '2016-07-09', 'Mathematics', 'Dallas', 51000),
-('Ian', 109, '2018-12-01', 'Commerce', 'San Diego', 46000),
-('Jack', 110, '2021-03-21', 'Science', 'Denver', 53000);
-SELECT * FROM Teacher;
-( b ) Give Increment of 25% salary for Mathematics Department .
-UPDATE Teacher
-SET Salary = Salary * 1.25
-WHERE DeptName = 'Mathematics';
-( c ) Perform Rollback command
-ROLLBACK;
-( d ) Give Increment of 15% salary for Commerce Department
-UPDATE Teacher
-SET Salary = Salary * 1.15
-WHERE DeptName = 'Commerce';
-( e ) Perform commit command 
-COMMIT;
-(f) Add the constraint not null on the Date of Joining
-Add NOT NULL Constraint on Date_of_Joining (Already done in Step 2)
-(g) Change the datatype of JOB_ID from char to varchar2
-ALTER TABLE Teacher
-ADD JOB_ID VARCHAR(10);
-(h)Add a new column; HIREDATE to the existing relation and add the constraint not null on it
-ALTER TABLE Teacher
-ADD HIREDATE DATE DEFAULT '2000-01-01' NOT NULL;
-(i) delete the record of the commerce department
-DELETE FROM Teacher
-WHERE DeptName = 'Commerce';
+
+3) Outliers
+# Upload the CSV file
+uploaded = files.upload()
+# Load the CSV file into a DataFrame
+df = pd.read_csv('Height.csv')
+print(df.head(4))
+name=df['Name']
+height=df['Height(cm)']
+print("Missing Names:",name.isnull().sum())
+print("Missing Height:",height.isnull().sum())
+df['Height(cm)'].fillna(df['Height(cm)'].mode(), inplace=True)
+df.dropna(subset=['Name'], inplace=True)
+# Function to detect outliers
+def detect_outliers(df, Height):
+Q1 = df[Height].quantile(0.25)
+Q3 = df[Height].quantile(0.75)
+IQR = Q3 - Q1
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+outliers = df[(df[Height] < lower_bound) | (df[Height] > upper_bound)]
+return outliers, lower_bound, upper_bound
+# Detect outliers
+outliers, lower_bound, upper_bound = detect_outliers(df, 'Height(cm)')
+# Print detected outliers
+print("\nOutliers:")
+print(outliers)
+# Calculate the mode value of height
+mode_height = df['Height(cm)'].mode()[0]
+# Replace outliers with the mode value
+df.loc[(df['Height(cm)'] < lower_bound) | (df['Height(cm)'] > upper_bound), 'Height(cm)'] = 
+mode_height
+# Print the updated dataframe
+print("\nUpdated dataframe with outliers replaced:")
+print(df)
 
 
-4)
-CREATE DATABASE SalesDB;
-USE SalesDB;
-CREATE TABLE
-Sales (
-SalesNo INT PRIMARY KEY,
-SalesName
-VARCHAR(50), Branch 
-VARCHAR(50),
-SalesAmount
-INT, DOB 
-DATE
-);
-(a ) Insert five records
-INSERT INTO Sales (SalesNo, SalesName, Branch, SalesAmount, DOB)
-VALUES (1, 'Alice', 'New York', 5000, '1990-12-15'),
-(2, 'Bob', 'Los Angeles', 7000, '1988-05-22'),
-(3, 'Charlie', 'Chicago', 6500, '1992-12-25'),
-(4, 'David', 'New York', 8000, '1995-07-10'),
-(5, 'Eve', 'Los Angeles', 7200, '1991-03-08');
-(b ) Calculate total sales amount in each branch 
-SELECT Branch, SUM(SalesAmount) AS
-Total_Sales FROM Sales
-GROUP BY Branch;
-(c ) Calculate average sales amount in each
-branch . SELECT Branch, AVG(SalesAmount) AS
-Average_Sales FROM Sales
-GROUP BY Branch;
-(d ) Display all the salesmen, DOB who are born in the month of December as
-day in character format i.e. 21-Dec-09
-SELECT SalesName, DATE_FORMAT(DOB, '%d-%b-%y') AS 
-Formatted_DOB FROM Sales
-WHERE MONTH(DOB) = 12;
-(e ) Display the name and DOB of salesman in alphabetical order of the month
-SELECT SalesName, DOB 
-FROM Sales
-ORDER BY MONTH(DOB);
-(f)Display the list of the Salesman in Upper Case.
-SELECT UPPER(SalesName) AS Salesman_Name 
-FROM Sales;
-
-5)
-CREATE TABLE students ( roll_no int,
-attendance int, status varchar(20)
-);
-insert into students (roll_no, attendance, status) values (101, 80); insert into students (roll_no, attendance, status) values (102, 65); 
-insert into students (roll_no, attendance, status) values (103, 92); insert into students (roll_no, attendance, status) values (104, 55); 
-insert into students (roll_no, attendance, status) values (105, 98);
-set serveroutput on;
-SQL> declare
-roll students.roll_no%TYPE;
-att students.attendance%TYPE; begin
-roll:= &roll_no;
-select attendance into att from students where roll_no = roll; if att<75 then
-dbms_output.put_line(roll || 'term not granted'); update students set status='D' where roll_no=roll; else
-dbms_output.put_line(roll || 'term granted');
-update students set status='ND' where roll_no=roll; end if;
-commit; exception
-when no_data_found then dbms_output.put_line(roll || 'student not found'); when others then dbms_output.put_line('unexpected error');
-end;
-/
 
 
-6)
-CREATE TABLE EMPLOYEES ( FIRST_NAME VARCHAR(20), LAST_NAME VARCHAR(20), DEPARTMENT_ID INT, SALARY INT
-);
-INSERT INTO EMPLOYEES(fIRST_NAME, LAST_NAME, DEPARTMENT_ID, SALARY
-)VALUES(‘Ram’, ‘Sharma’, 101, 5000);
-INSERT INTO EMPLOYEES(fIRST_NAME, LAST_NAME, DEPARTMENT_ID, SALARY
-)VALUES(Paxton, Evans, 102, 5622);
-INSERT INTO EMPLOYEES(fIRST_NAME, LAST_NAME, DEPARTMENT_ID, SALARY
-)VALUES(Violet, Abrams, 103, 4500);
+4)Statistics
+import pandas as pd
+import numpy as np
+a = pd.read_csv(r"C:\Users\SUJAY\Downloads\Product Sales Data.csv")
+print(a)
+mean = a['Total Profit'].mean()
+print("Mean:", mean)
+maximum = a['Total Profit'].max()
+print("Maximum:", maximum)
+std_dev = a['Total Profit'].std()
+print("Standard Deviation:", std_dev)
+median = a['Total Profit'].median()
+print("Median:", median)
+minimum = a['Total Profit'].min()
+print("Minimum:", minimum)
+per = np.percentile(a['Total Profit'], [25, 50, 75])
+print("25th, 50th, 75th Percentiles:", per)
+grouped = a.groupby('Detergent')
+group = grouped['Moisturizer'].mean()
+print("\nGroup :\n",group)
 
 
-set serveroutput on; declare
-v_emp_name employees.first_name%type; v_emp_l_name employees.last_name%type; v_emp_id employees.department_id%type;
-v_salary employees.salary%type;
-cursor highest_paid is select first_name, last_name ,department_id, salary from employees where salary=(select max(salary) from employees);
-begin
-open highest_paid;
-fetch highest_paid into v_emp_name, v_emp_l_name, v_emp_id, v_salary; if highest_paid%found then
-dbms_output.put_line('first name:' || v_emp_name); dbms_output.put_line('last name:' || v_emp_l_name); dbms_output.put_line('department id:' || v_emp_id); dbms_output.put_line('salary:' || v_salary);
-else
-dbms_output.put_line('no record found'); end if;
-close highest_paid; end;
-/
+5)Z-score
+import pandas as pd
+import numpy as np
+from scipy.stats import zscore
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load dataset
+df = pd.read_csv(r"C:\Users\pawar\Downloads\student_depression_dataset.csv")
+
+# Only numeric columns
+data = df.select_dtypes(include=[np.number])
+
+# Z-score Outlier Detection
+z_scores = np.abs(zscore(data))
+print("Z-scores:\n", z_scores)
+print("\nOutliers (Z-score > 3):\n", z_scores > 3)
+
+# Modified Z-score Outlier Detection
+median = data.median()
+mad = (np.abs(data - median)).median()
+mod_z_scores = 0.6745 * (data - median) / mad
+print("\nModified Z-scores:\n", mod_z_scores)
+print("\nOutliers (Modified Z-score > 3.5):\n", mod_z_scores > 3.5)
+
+# Boxplot for Outliers Visualization
+plt.figure(figsize=(12,10))
+sns.boxplot(data=data,)
+plt.title("Outlier Detection (Boxplot)")
+plt.show()
 
 
-7)
-Triggers CREATE TABLE employee(
-EMP_ID INT,
-SALARY INT
-);
-INSERT INTO employee (EMP_ID, SALARY) VALUES(101, 5000); INSERT INTO employee (EMP_ID, SALARY) VALUES(102, 999);
-INSERT INTO employee (EMP_ID, SALARY) VALUES(103,2000);
+
+
+6)Bivariate
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the dataset
+df = pd.read_csv(r"C:\Users\pawar\Downloads\student_depression_dataset.csv")
+
+# Select only numeric columns
+numeric_df = df.select_dtypes(include=['float64', 'int64'])
+
+# ---------------- Univariate Analysis ----------------
+print("Univariate Analysis - Statistics:\n")
+print(numeric_df.describe())
+
+# Plot histograms (one simple graph for all)
+numeric_df.hist(figsize=(10, 6))
+plt.suptitle('Univariate Analysis - Histograms')
+plt.show()
+
+# ---------------- Bivariate Analysis ----------------
+print("\nBivariate Analysis - Correlation:\n")
+print(numeric_df.corr())
+
+# Simple scatter plot between first two numeric columns
+x_col = numeric_df.columns[0]
+y_col = numeric_df.columns[1]
+
+plt.figure(figsize=(6, 4))
+sns.scatterplot(data=numeric_df, x=x_col, y=y_col)
+plt.title('Scatter Plot between {} and {}'.format(x_col, y_col))
+plt.show()
+
+
+
+
+
+
+
+
